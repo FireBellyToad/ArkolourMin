@@ -1,9 +1,8 @@
 
 extends Spatial
 
-# member variables here, example:
-# var a=2
-# var b="textvar"
+#Bat speed
+var speed = 10
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -13,9 +12,15 @@ func _ready():
 	
 func _process(delta):
 	
-	var bat = get_node("RigidBody").get_linear_velocity();
-	
-	#TODO Cambiare
-	if(Input.is_key_pressed( KEY_RIGHT)
-		bat.x +=
+	_move_bat(delta)
 
+func _move_bat(delta):
+	var movement = get_translation()
+	
+	if(Input.is_action_pressed("bat_right")):
+		movement += (Vector3(speed,0,0)*delta)
+
+	if(Input.is_action_pressed("bat_left")):
+		movement += (Vector3(-speed,0,0)*delta)
+
+	set_translation(movement)
