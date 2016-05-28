@@ -8,11 +8,9 @@ var ball = preload("res://scenes/ball.scn")
 const BAT_SPEED = 250
 var bat_color 
 
-func _ready():
-	
+func _ready():	
 	bat_color = colors.get_red_val()
 	set_process(true)
-	pass
 	
 func _process(delta):
 	_control_bat(delta)
@@ -37,14 +35,14 @@ func _control_bat(delta):
 		_change_color(colors.get_yellow_val())
 
 #Cambia il colore della sbarra
-func _change_color(color):
+func _change_color(new_color):
 	
-	bat_color = color
+	bat_color = new_color
 	
 	#Cambia la mask di collisione (se palla e sbarra non hanno lo stesso colore, non devono collidere)
-	set_collision_mask(color)
+	set_collision_mask(new_color)
 		
 	#Cambia il colore renderizzato a schermo
-	get_node("Viewport/Mesh").set_material_override(colors.get_mat(color))
+	get_node("Viewport/Mesh").set_material_override(colors.get_mat(new_color))
 	
 	
