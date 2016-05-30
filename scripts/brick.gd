@@ -11,14 +11,15 @@ func _ready():
 
 
 func _init_brick():
-	_set_brick_color(colors.get_red_blue_yellow_val())
+	_set_brick_color(colors.get_random_val())
 	brick_hardness = 2
 	
 #Setta il colore gradico del Mattone
 func _set_brick_color(new_color):
 	brick_color = new_color
 	get_node("Viewport/Brick3D/LeftSide").set_material_override(colors.get_brick_mat(brick_color,"LeftSide"))
-	get_node("Viewport/Brick3D/Middle").set_material_override(colors.get_brick_mat(brick_color,"Middle"))
+	get_node("Viewport/Brick3D/MiddleLeft").set_material_override(colors.get_brick_mat(brick_color,"MiddleLeft"))
+	get_node("Viewport/Brick3D/MiddleRight").set_material_override(colors.get_brick_mat(brick_color,"MiddleRight"))
 	get_node("Viewport/Brick3D/RightSide").set_material_override(colors.get_brick_mat(brick_color,"RightSide"))
 
 	
@@ -32,22 +33,22 @@ func decrease_hardness(ball_size):
 func get_color_from_brick():
 	
 	if(brick_color == colors.get_blue_yellow_val()):
-		if(_random(2) == 1):
+		if(colors.random(2) == 1):
 			return colors.get_blue_val()	
 		return colors.get_yellow_val()
 	
 	if(brick_color == colors.get_red_yellow_val()):
-		if(_random(2) == 1):
+		if(colors.random(2) == 1):
 			return colors.get_red_val()		
 		return colors.get_yellow_val()
 	
 	if(brick_color == colors.get_red_blue_val()):
-		if(_random(2) == 1):
+		if(colors.random(2) == 1):
 			return colors.get_red_val()		
 		return colors.get_blue_val()
 	
 	if(brick_color == colors.get_red_blue_yellow_val()):
-		var rand = _random(3)
+		var rand = colors.random(3)
 		if(rand == 1):
 			return colors.get_red_val()
 		if(rand == 2):
@@ -56,6 +57,3 @@ func get_color_from_brick():
 	
 	return brick_color
 	
-func _random(number):
-	randomize()
-	return 1+(randi()%number)

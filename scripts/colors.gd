@@ -22,7 +22,6 @@ static func get_blue_val():
 static func get_yellow_val():
 	return COLOR_YELLOW
 
-
 static func get_red_blue_val():
 	return COLOR_RED_BLUE
 	
@@ -34,7 +33,30 @@ static func get_red_yellow_val():
 
 static func get_red_blue_yellow_val():
 	return COLOR_RED_BLUE_YELLOW
-
+	
+#Ottiene colore casuale
+static func get_random_val():
+	var rand = random(7)
+	
+	if(rand == 1):
+		return get_red_val()
+	if(rand == 2):
+		return get_blue_val()
+	if(rand == 3):
+		return get_yellow_val()
+	if(rand == 4):
+		return get_red_blue_val()
+	if(rand == 5):
+		return get_red_yellow_val()
+	if(rand == 6):
+		return get_blue_yellow_val()
+	if(rand == 7):
+		return get_red_blue_yellow_val()
+	
+#Funzione per tirare un dado di n facce
+static func random(n):
+	randomize()
+	return 1+(randi()%n)
 
 #Ottiene il corretto material a seconda del colore scelto
 static func get_mat(color):
@@ -54,28 +76,28 @@ static func get_brick_mat(color,part):
 		return get_mat(color)
 	
 	if(color == COLOR_RED_BLUE):
-		if(part == "LeftSide"):
+		if(part == "LeftSide" or part == "MiddleLeft" ):
 			return RED_MATERIAL
 		else:
 			return BLUE_MATERIAL
 	
 	if(color == COLOR_RED_YELLOW):
-		if(part == "LeftSide"):
+		if(part == "LeftSide" or part == "MiddleLeft" ):
 			return RED_MATERIAL
 		else:
 			return YELLOW_MATERIAL
 	
 	if(color == COLOR_BLUE_YELLOW):
-		if(part == "LeftSide"):
+		if(part == "LeftSide" or part == "MiddleLeft" ):
 			return BLUE_MATERIAL
 		else:
 			return YELLOW_MATERIAL
 	
 	if(color == COLOR_RED_BLUE_YELLOW):
-		if(part == "LeftSide"):
+		if(part == "LeftSide" ):
 			return RED_MATERIAL
 		else:
-			if(part == "Middle"):
+			if(part == "MiddleLeft" or part == "MiddleRight" ):
 				return BLUE_MATERIAL
 			else:
 				return YELLOW_MATERIAL
