@@ -9,12 +9,12 @@ func _ready():
 	_init_brick()
 
 
-
 func _init_brick():
 	_set_brick_color(colors.get_random_val())
-	brick_hardness = 2
+	brick_hardness = colors.random(3)*2
+	_update_brick_hardness()
 	
-#Setta il colore gradico del Mattone
+#Setta il colore grafico del Mattone
 func _set_brick_color(new_color):
 	brick_color = new_color
 	get_node("Viewport/Brick3D/LeftSide").set_material_override(colors.get_brick_mat(brick_color,"LeftSide"))
@@ -22,10 +22,23 @@ func _set_brick_color(new_color):
 	get_node("Viewport/Brick3D/MiddleRight").set_material_override(colors.get_brick_mat(brick_color,"MiddleRight"))
 	get_node("Viewport/Brick3D/RightSide").set_material_override(colors.get_brick_mat(brick_color,"RightSide"))
 
+#Aggiorna la durezza del Mattone
+func _update_brick_hardness():
+		
+	if(brick_hardness >4):
+		get_node("Hardness").set_opacity(0.6)
+		return
+		
+	if(brick_hardness >2):
+		get_node("Hardness").set_opacity(0.4)
+		return
+	
+	get_node("Hardness").set_opacity(0)
 	
 #Decrementa la durezza del mattone. Se ridotta a zero, il mattone è distrutto
 func decrease_hardness(ball_size):
 	brick_hardness -=ball_size
+	_update_brick_hardness()
 	if(brick_hardness <= 0):
 		queue_free()
 	
