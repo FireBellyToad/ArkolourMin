@@ -4,10 +4,10 @@ const COLOR_BLUE = 2
 const COLOR_YELLOW = 4
 
 #Colori speciali per i mattoni
-const COLOR_RED_BLUE = 5
+const COLOR_RED_BLUE = 3
 const COLOR_BLUE_YELLOW = 6
-const COLOR_RED_YELLOW = 7
-const COLOR_RED_BLUE_YELLOW = 8
+const COLOR_RED_YELLOW = 5
+const COLOR_RED_BLUE_YELLOW = 7
 
 const RED_MATERIAL = preload("res://materials/red_material.mtl")
 const BLUE_MATERIAL = preload("res://materials/blue_material.mtl")
@@ -38,19 +38,19 @@ static func get_red_blue_yellow_val():
 static func get_random_val():
 	var rand = random(7)
 	
-	if(rand == 1):
+	if(rand == COLOR_RED):
 		return get_red_val()
-	if(rand == 2):
+	if(rand == COLOR_BLUE):
 		return get_blue_val()
-	if(rand == 3):
+	if(rand == COLOR_YELLOW):
 		return get_yellow_val()
-	if(rand == 4):
+	if(rand == COLOR_RED_BLUE):
 		return get_red_blue_val()
-	if(rand == 5):
+	if(rand == COLOR_RED_YELLOW):
 		return get_red_yellow_val()
-	if(rand == 6):
+	if(rand == COLOR_BLUE_YELLOW):
 		return get_blue_yellow_val()
-	if(rand == 7):
+	if(rand == COLOR_RED_BLUE_YELLOW):
 		return get_red_blue_yellow_val()
 	
 #Funzione per tirare un dado di n facce
@@ -69,6 +69,7 @@ static func get_mat(color):
 		
 	if(color == COLOR_YELLOW):
 		return YELLOW_MATERIAL
+
 
 static func get_brick_mat(color,part):
 	

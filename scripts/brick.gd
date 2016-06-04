@@ -6,16 +6,43 @@ var brick_color
 var brick_hardness
 
 func _ready():
-	_init_brick()
+	init_brick()
 
-
-func _init_brick():
-	_set_brick_color(colors.get_random_val())
-	brick_hardness = colors.random(3)*2
-	_update_brick_hardness()
+#Inizializza il Mattone
+func init_brick():
+	var new_color = 0;
+	brick_hardness = 0;
 	
+	for group in get_groups():
+		if(group == "Red"):
+			new_color += colors.get_red_val()
+			
+		if(group == "Blue"):
+			new_color += colors.get_blue_val()
+			
+		if(group == "Yellow"):
+			new_color += colors.get_yellow_val()		
+			
+		if(group == "Normal"):
+			brick_hardness = 2
+			
+		if(group == "Hard"):
+			brick_hardness = 4
+			
+		if(group == "SuperHard"):
+			brick_hardness = 6
+	
+	if(brick_hardness == 0):
+		brick_hardness = colors.random(3)*2
+	
+	if(new_color == 0):
+		new_color = colors.random(7)
+	
+	_set_brick_color(new_color)
+	_update_brick_hardness()
+
 #Setta il colore grafico del Mattone
-func _set_brick_color(new_color):
+func _set_brick_color(new_color):	
 	brick_color = new_color
 	get_node("Viewport/Brick3D/LeftSide").set_material_override(colors.get_brick_mat(brick_color,"LeftSide"))
 	get_node("Viewport/Brick3D/MiddleLeft").set_material_override(colors.get_brick_mat(brick_color,"MiddleLeft"))
@@ -26,7 +53,7 @@ func _set_brick_color(new_color):
 func _update_brick_hardness():
 		
 	if(brick_hardness >4):
-		get_node("Hardness").set_opacity(0.6)
+		get_node("Hardness").set_opacity(0.8)
 		return
 		
 	if(brick_hardness >2):

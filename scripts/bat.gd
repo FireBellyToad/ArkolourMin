@@ -6,13 +6,14 @@ var ball = preload("res://scenes/ball.scn")
 
 #Bat speed
 const BAT_SPEED = 250
+const BAT_Y = 625
 var bat_color 
 
 func _ready():	
 	bat_color = colors.get_red_val()
-	set_process(true)
+	set_fixed_process(true)
 	
-func _process(delta):
+func _fixed_process(delta):
 	_control_bat(delta)
 		
 
@@ -33,6 +34,11 @@ func _control_bat(delta):
 
 	if(Input.is_action_pressed("bat_yellow")):
 		_change_color(colors.get_yellow_val())
+		
+	#Toppa per evitare che la barra venga spostata verso il basso
+	var bat_pos = get_global_pos()
+	if(bat_pos.y != BAT_Y):
+		set_global_pos(Vector2(bat_pos.x,BAT_Y))
 
 #Cambia il colore della sbarra
 func _change_color(new_color):

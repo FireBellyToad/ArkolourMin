@@ -28,6 +28,8 @@ func _init_ball():
 
 func _fixed_process(delta):
 	
+	var velocity = get_linear_velocity()
+	
 	if(get_pos().y > 700):
 		_init_ball()
 		return
@@ -49,6 +51,12 @@ func _fixed_process(delta):
 			var direction = get_pos() - body.get_node("Ancor").get_global_pos()
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
+			
+		if(body.is_in_group("Enemy")):		
+			var direction = get_pos() - body.get_global_pos()
+			var velocity = direction.normalized()*ball_speed
+			set_linear_velocity(velocity)
+			body.queue_free()
 
 #Cambia colore della palla
 func _change_color(new_color):		
