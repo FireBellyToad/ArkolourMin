@@ -52,7 +52,8 @@ func _fixed_process(delta):
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
 			
-		if(body.is_in_group("Enemy")):		
+		#Se l'oggetto con cui collide è un nemico, lo elimina dal gioco
+		if(body.is_in_group("Enemy")):
 			var direction = get_pos() - body.get_global_pos()
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
