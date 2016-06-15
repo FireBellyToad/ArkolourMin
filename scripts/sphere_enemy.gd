@@ -1,8 +1,9 @@
 
 extends RigidBody2D
 
+var colors = preload("res://scripts/colors.gd")
 
-const SPEED = 150
+const SPEED = 100
 
 
 func _ready():
@@ -17,4 +18,5 @@ func _fixed_process(delta):
 	if(get_global_pos().y > 400):
 		set_linear_velocity(Vector2(velocity.x,-SPEED))
 		return
+	
 

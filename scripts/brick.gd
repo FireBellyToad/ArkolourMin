@@ -53,11 +53,11 @@ func _set_brick_color(new_color):
 func _update_brick_hardness():
 		
 	if(brick_hardness >4):
-		get_node("Hardness").set_opacity(0.8)
+		get_node("Hardness").set_opacity(0.7)
 		return
 		
 	if(brick_hardness >2):
-		get_node("Hardness").set_opacity(0.4)
+		get_node("Hardness").set_opacity(0.35)
 		return
 	
 	get_node("Hardness").set_opacity(0)
