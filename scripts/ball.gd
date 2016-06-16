@@ -23,7 +23,7 @@ func _init_ball():
 	ball_speed = INITIAL_SPEED
 	ball_size = NORMAL_SIZE
 	set_pos(start_pos) 
-	_change_color(colors.get_blue_val())
+	_change_color(colors.get_red_val())
 	set_linear_velocity(Vector2(0,-ball_speed))
 
 func _fixed_process(delta):
@@ -36,7 +36,7 @@ func _fixed_process(delta):
 	
 	var bodies = get_colliding_bodies()
 	
-	for body in bodies:		
+	for body in bodies:
 		
 		#Se l'oggetto con cui collide è un Mattone
 		if (body.is_in_group("Brick")):
