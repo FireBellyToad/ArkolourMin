@@ -19,5 +19,5 @@ func _fixed_process(delta):
 			queue_free()
 	
 	#Se esce dallo schermo viene rimosso
-	if(get_pos().y >700):
+	if(get_pos().y >750):
 		queue_free()
