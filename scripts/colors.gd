@@ -53,6 +53,23 @@ static func get_random_val():
 	if(rand == COLOR_RED_BLUE_YELLOW):
 		return get_red_blue_yellow_val()
 	
+#Funzione per direzione casuale della palla
+static func get_random_direction():
+	var rand = random(6)
+	
+	if(rand == 1):
+		return Vector2(-1,-1)
+	if(rand == 2):
+		return Vector2(0,-1)
+	if(rand == 3):
+		return Vector2(1,-1)
+	if(rand == 4):
+		return Vector2(1,1)
+	if(rand == 5):
+		return Vector2(0,1)
+	if(rand == 6):
+		return Vector2(-1,1)
+	
 #Funzione per tirare un dado di n facce
 static func random(n):
 	randomize()

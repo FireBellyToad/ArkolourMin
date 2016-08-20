@@ -52,15 +52,16 @@ func _set_brick_color(new_color):
 #Aggiorna la durezza del Mattone
 func _update_brick_hardness():
 		
+	#Cambia l'opacità del mattone. Meno è opaco, più sarà scuro.
 	if(brick_hardness >4):
-		get_node("Hardness").set_opacity(0.7)
+		get_node("ViewportSprite").set_self_opacity(0.3)
 		return
 		
 	if(brick_hardness >2):
-		get_node("Hardness").set_opacity(0.35)
+		get_node("ViewportSprite").set_self_opacity(0.65)
 		return
 	
-	get_node("Hardness").set_opacity(0)
+	get_node("ViewportSprite").set_self_opacity(1)
 	
 #Decrementa la durezza del mattone. Se ridotta a zero, il mattone è distrutto
 func decrease_hardness(ball_size):

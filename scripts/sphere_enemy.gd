@@ -13,6 +13,7 @@ var drop_countdown
 func _ready():
 	reload()
 	set_linear_velocity(Vector2(-SPEED,-SPEED))
+	get_node("Collider").set_trigger(true)
 	set_fixed_process(true)
 	pass
 
@@ -30,6 +31,19 @@ func _fixed_process(delta):
 	if(get_global_pos().y > 400):
 		set_linear_velocity(Vector2(velocity.x,-SPEED))
 		return
+		
+	if(get_global_pos().y < 25):
+		set_linear_velocity(Vector2(velocity.x,SPEED))
+		return
+	
+	if(get_global_pos().x > 575):
+		set_linear_velocity(Vector2(-SPEED,velocity.x))
+		return	
+
+	if(get_global_pos().x < 25):
+		set_linear_velocity(Vector2(SPEED,velocity.x))
+		return	
+	
 	
 #Crea una nuova goccia
 func _spawn_drop():
