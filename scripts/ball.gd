@@ -41,7 +41,10 @@ func _fixed_process(delta):
 		move_time = 0
 		ball_speed = INITIAL_SPEED
 		last_triang_body.restart_movement()
-		set_linear_velocity(colors.get_random_direction()*ball_speed)
+		var target = last_triang_body.get_target()
+		var direction = target - get_pos()
+		var velocity = direction.normalized()
+		set_linear_velocity(velocity*ball_speed)
 	 
 	var velocity = get_linear_velocity()
 	
@@ -71,14 +74,17 @@ func _fixed_process(delta):
 		#Se l'oggetto con cui collide è un nemico, lo elimina dal gioco
 		if(body.is_in_group("Enemy")):
 			
-			#Se l'oggetto con cui collide è un nemico Triangolo a caccia, viene bloccato
+			#Se l'oggetto con cui collide è un nemico Triangolo ed è di taglia normale
 			if(body.is_in_group("Triangle") and ball_size != BIG_SIZE ):
 				
+				#Se non è a caccia, gli passa attraverso
 				if(!body.is_hunting()):
 					return
-					
+				
+				#Se è a caccia, viene bloccato
 				move_time = STOP_TIME
 				set_linear_velocity(Vector2(0,0))
+				set_global_pos(body.get_node("Stomach").get_global_pos())
 				body.stop_hunting()
 				last_triang_body = body
 				return
