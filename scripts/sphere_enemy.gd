@@ -1,16 +1,17 @@
 
 extends RigidBody2D
 
-var colors = preload("res://scripts/colors.gd")
 var drops = preload("res://scenes/black_drop.scn")
 
 const SPEED = 100
 const DROP_FREQUENCY = 2;
 const DROP_PROBABILITY = 25;
+const POINTS_AWARD = 500
 
 var drop_countdown
 
 func _ready():
+	main = get_node("/root/main");
 	reload()
 	set_linear_velocity(Vector2(-SPEED,-SPEED))
 	get_node("Collider").set_trigger(true)
@@ -23,7 +24,7 @@ func _fixed_process(delta):
 	#creare una goccia
 	drop_countdown -=1*delta
 	
-	if(colors.random(100) < DROP_PROBABILITY and drop_countdown < 0 ):
+	if(main.random(100) < DROP_PROBABILITY and drop_countdown < 0 ):
 		_spawn_drop()
 	
 	#se raggiunge una certa zona dello schermo, rimbalza verso l'alto

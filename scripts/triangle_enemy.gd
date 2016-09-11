@@ -1,15 +1,18 @@
 
 extends KinematicBody2D
 
-var colors = preload("res://scripts/colors.gd")
-
 const ROTATE_SPEED = 5
 const SPEED = 100
+const HUNT_SPEED = 200
 const HUNT_PROBABILITY = 10
 const HUNT_COUNTER_MAX  = 5
+const HUNT_SIGHT = 150
 const WANDER_PROBABILITY = 20
 const WANDER_COUNTER_MAX = 1
 const STOP_TIME = 1
+const POINTS_AWARD = 500
+
+var main
 
 var ball_node
 var stop_mov
@@ -20,6 +23,7 @@ var wander_counter
 var direction = Vector2(-1, -1)
 
 func _ready():
+	main = get_node("/root/main");
 	ball_node = get_tree().get_nodes_in_group("Ball")
 	ball_node = ball_node[0]
 	set_fixed_process(true)
@@ -28,8 +32,8 @@ func _ready():
 	hunt_countdown = HUNT_COUNTER_MAX
 	get_node("Collider").set_trigger(true)
 	
-	var x = colors.random(525)+25;
-	var y = colors.random(575)+25;
+	var x = main.random(525)+25;
+	var y = main.random(575)+25;
 	new_pos= Vector2(x,y)
 	pass
 
@@ -43,22 +47,26 @@ func _fixed_process(delta):
 		return
 		
 	hunt_countdown -=1*delta
+	var speed = SPEED
 	
 	#TODO Dopo un certo periodo di tempo, ricomincia a cacciare la palla
-	if(!is_hunting and colors.random(100) < HUNT_PROBABILITY and hunt_countdown < 0 ):
-		is_hunting = true	
+	if(!is_hunting and main.random(100) < HUNT_PROBABILITY and hunt_countdown < 0 ):
+		var dist = get_pos().distance_to(ball_node.get_global_pos())
+		if( dist < HUNT_SIGHT ):
+			is_hunting = true	
 	
 	
 	#Se sta cacciando, si muove verso la palla, altrimenti si muove casualmente
 	if(is_hunting):
 		new_pos = ball_node.get_global_pos()	
+		speed = HUNT_SPEED
 		
 	else:
 		wander_counter -=1*delta
 				
-		if(colors.random(100) < WANDER_PROBABILITY and wander_counter <= 0 ):
-			var x = 525*(colors.random(2)-1)/colors.random(2);
-			var y = 575*(colors.random(2)-1)/colors.random(2);
+		if(main.random(100) < WANDER_PROBABILITY and wander_counter <= 0 ):
+			var x = 525*(main.random(2)-1)/main.random(2);
+			var y = 575*(main.random(2)-1)/main.random(2);
 			new_pos= Vector2(x,y)
 			wander_counter = WANDER_COUNTER_MAX
 			
@@ -70,14 +78,14 @@ func _fixed_process(delta):
 	#Insegue la palla
 	var ball_dir = new_pos - get_global_pos()
 	ball_dir=ball_dir.normalized()
-	move(ball_dir*SPEED*delta)
+	move(ball_dir*speed*delta)
 
 #Smette di muoversi e di cacciare
 func stop_hunting():	
 	is_hunting = false
 	stop_mov = true
-	var x = 525*(colors.random(2)-1)/colors.random(2);
-	var y = 575*(colors.random(2)-1)/colors.random(2);
+	var x = 525*(main.random(2)-1)/main.random(2);
+	var y = 575*(main.random(2)-1)/main.random(2);
 	new_pos= Vector2(x,y)
 		
 #Ricomincia a muoversi

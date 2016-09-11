@@ -1,7 +1,8 @@
 
 extends RigidBody2D
 
-var colors = preload("res://scripts/colors.gd")
+#Inizializzarli sempre
+var main 
 
 #Costanti
 const INITIAL_SPEED = 350
@@ -19,6 +20,7 @@ var move_time
 var last_triang_body
 
 func _ready():
+	main = get_node("/root/main");
 	_init_ball()
 	set_fixed_process(true)
 	
@@ -27,7 +29,7 @@ func _init_ball():
 	ball_size = NORMAL_SIZE
 	move_time = 0
 	set_pos(start_pos) 
-	_change_color(colors.get_red_val())
+	_change_color(main.get_red_val())
 	set_linear_velocity(Vector2(0,-ball_speed))
 
 func _fixed_process(delta):
@@ -93,6 +95,7 @@ func _fixed_process(delta):
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
 			body.queue_free()
+			main.score += body.POINTS_AWARD
 
 #Cambia colore della palla
 func _change_color(new_color):		
@@ -103,5 +106,5 @@ func _change_color(new_color):
 	set_layer_mask(new_color)
 	
 	#cambia il colore della palla a schermo
-	get_node("Viewport/Sphere").set_material_override(colors.get_mat(new_color))
+	get_node("Viewport/Sphere").set_material_override(main.get_mat(new_color))
 	

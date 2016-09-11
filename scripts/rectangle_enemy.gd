@@ -1,6 +1,5 @@
 extends KinematicBody2D
 
-var colors = preload("res://scripts/colors.gd")
 var bricks = preload("res://scenes/brick.scn")
 
 const SPEED = 100
@@ -8,6 +7,7 @@ const WANDER_PROBABILITY = 10
 const WANDER_COUNTER_MAX = 2
 const BRICK_CREATION_PROBABILITY = 25
 const BRICK_CREATION_FREQUENCY = 10
+const POINTS_AWARD = 500
 
 var brick_countdown
 var velocity 
@@ -15,6 +15,7 @@ var direction = Vector2(-1, -1)
 var wander_counter
 
 func _ready():
+	main = get_node("/root/main");
 	brick_countdown = BRICK_CREATION_FREQUENCY
 	wander_counter = 0
 	get_node("Collider").set_trigger(true)
@@ -33,12 +34,12 @@ func _fixed_process(delta):
 		wander_counter -=1*delta
 	
 	#Crea il nuovo Mattone
-	if(colors.random(100) < BRICK_CREATION_PROBABILITY && brick_countdown < 0):
+	if(main.random(100) < BRICK_CREATION_PROBABILITY && brick_countdown < 0):
 		_spawn_brick()
 	
-	if(colors.random(100) < WANDER_PROBABILITY and wander_counter <= 0 ):
-		if(colors.random(100) < 25):
-			direction = Vector2(colors.random(3)-2,colors.random(3)-2)
+	if(main.random(100) < WANDER_PROBABILITY and wander_counter <= 0 ):
+		if(main.random(100) < 25):
+			direction = Vector2(main.random(3)-2,main.random(3)-2)
 	
 	if(get_global_pos().y > 400):
 		direction.y = -direction.y
