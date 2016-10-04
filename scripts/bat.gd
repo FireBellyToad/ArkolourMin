@@ -6,7 +6,7 @@ var main
 #Bat speed
 const BAT_SPEED = 250
 const BAT_Y = 625
-var bat_color 
+var bat_color setget ,_get_color
 
 func _ready():	
 	main = get_node("/root/main");
@@ -45,10 +45,12 @@ func _change_color(new_color):
 	
 	bat_color = new_color
 	
-	#Cambia la mask di collisione (se palla e sbarra non hanno lo stesso colore, non devono collidere)
-	set_collision_mask(new_color)
+	#Cambia la mask di collisione se difficoltà CLASSICA (se palla e sbarra non hanno lo stesso colore, non devono collidere)	
+	if(not main.is_normal_difficulty()):
+		set_collision_mask(new_color)
 		
 	#Cambia il colore renderizzato a schermo
 	get_node("Viewport/Mesh").set_material_override(main.get_mat(new_color))
 	
-	
+func _get_color():
+	return bat_color;

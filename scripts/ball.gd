@@ -17,6 +17,7 @@ var ball_speed
 var ball_color
 var ball_size
 var move_time
+var ball_powered 
 var last_triang_body
 
 func _ready():
@@ -25,6 +26,8 @@ func _ready():
 	set_fixed_process(true)
 	
 func _init_ball():
+	ball_powered = false;	
+	get_node("Emitter").set_emitting(ball_powered)
 	ball_speed = INITIAL_SPEED
 	ball_size = NORMAL_SIZE
 	move_time = 0
@@ -33,6 +36,9 @@ func _init_ball():
 	set_linear_velocity(Vector2(0,-ball_speed))
 
 func _fixed_process(delta):
+	
+	#Se non è potenziata, non emette nulla
+	get_node("Emitter").set_emitting(ball_powered)
 	
 	#Decrementa il timer, dopo un certo periodo di tempo che è stata mangiata ricomincia a muoversi
 	if(move_time > 0):
@@ -62,13 +68,14 @@ func _fixed_process(delta):
 		#Se l'oggetto con cui collide è un Mattone
 		if (body.is_in_group("Brick")):
 			#Decrementa la durezza del mattone e ne prende un colore
-			body.decrease_hardness(ball_size)
+			body.decrease_hardness(ball_size,ball_powered)
 			_change_color(body.get_color_from_brick())
 		
 		#Se l'oggetto con cui collide è la Sbarra
 		if (body.get_name() == "Bat" ):	
-			
-			#Rimbalza con un angolo dato dalla posizione della palla rispetto alla sbarra			
+				
+			#Rimbalza con un angolo dato dalla posizione della palla rispetto alla sbarra
+			ball_powered = body._get_color() == ball_color;
 			var direction = get_pos() - body.get_node("Ancor").get_global_pos()
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
@@ -83,7 +90,7 @@ func _fixed_process(delta):
 				if(!body.is_hunting()):
 					return
 				
-				#Se è a caccia, viene bloccato
+				#Se è a caccia, viene bloccato nello "stomaco"
 				move_time = STOP_TIME
 				set_linear_velocity(Vector2(0,0))
 				set_global_pos(body.get_node("Stomach").get_global_pos())
@@ -95,16 +102,23 @@ func _fixed_process(delta):
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
 			body.queue_free()
-			main.score += body.POINTS_AWARD
+			#Se la palla è potenziata, raddopiano i punti
+			if(ball_powered):
+				main.score += body.POINTS_AWARD*2
+			else:
+				main.score += body.POINTS_AWARD
 
 #Cambia colore della palla
 func _change_color(new_color):		
 
 	ball_color = new_color
 	
-	#Cambia il layer di collisione (se palla e sbarra non hanno lo stesso colore, non devono collidere)
-	set_layer_mask(new_color)
+	#Cambia il layer di collisione se difficoltà CLASSICA  (se palla e sbarra non hanno lo stesso colore, non devono collidere)
+	if(not main.is_normal_difficulty()):
+		set_layer_mask(new_color)
 	
 	#cambia il colore della palla a schermo
 	get_node("Viewport/Sphere").set_material_override(main.get_mat(new_color))
+	
+	get_node("Emitter").set_color(main.get_godot_color(new_color))
 	

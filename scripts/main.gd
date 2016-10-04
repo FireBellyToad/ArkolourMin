@@ -1,10 +1,13 @@
 
 extends Node
 
-var colors = preload("res://scripts/colors.gd")
-
 var score setget ,get_score
 var high_score
+var difficulty 
+
+#Colori universali
+const DIFFICULTY_NORMAL = 1
+const DIFFICULTY_CLASSIC = 2
 
 #Colori universali
 const COLOR_RED = 1
@@ -20,6 +23,10 @@ const COLOR_RED_BLUE_YELLOW = 7
 const RED_MATERIAL = preload("res://materials/red_material.mtl")
 const BLUE_MATERIAL = preload("res://materials/blue_material.mtl")
 const YELLOW_MATERIAL = preload("res://materials/yellow_material.mtl") 
+
+const RED_COLOR = Color(255,0,0,1)
+const BLUE_COLOR = Color(0,0,255,1)
+const YELLOW_COLOR = Color(255,255,0,1)
 
 static func get_red_val():
 	return COLOR_RED
@@ -78,6 +85,16 @@ static func get_random_direction():
 	if(rand == 6):
 		return Vector2(-1,1)
 	
+static func get_godot_color(color):	
+	if(color == COLOR_RED):
+		return RED_COLOR
+		
+	if(color == COLOR_BLUE):
+		return BLUE_COLOR
+		
+	if(color == COLOR_YELLOW):
+		return YELLOW_COLOR
+		
 #Funzione per tirare un dado di n facce
 static func random(n):
 	randomize()
@@ -95,7 +112,7 @@ static func get_mat(color):
 	if(color == COLOR_YELLOW):
 		return YELLOW_MATERIAL
 
-
+#Ottiene il corretto material a seconda del colore e della parte scelto (per i Brick)
 static func get_brick_mat(color,part):
 	
 	if(color == COLOR_RED or color == COLOR_BLUE or color == COLOR_YELLOW):
@@ -128,13 +145,19 @@ static func get_brick_mat(color,part):
 			else:
 				return YELLOW_MATERIAL
 
+#Inizializzo punteggi e difficoltà
 func _ready():
 	score = 0
 	high_score = 10000000
+	difficulty = DIFFICULTY_NORMAL
 	
+#Incremento punteggio
 func add_score(value):
 	score += value
 	
 func get_score():
 	return score
+	
+func is_normal_difficulty():
+	return difficulty == DIFFICULTY_NORMAL
 	

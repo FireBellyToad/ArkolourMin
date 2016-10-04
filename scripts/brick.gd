@@ -68,12 +68,15 @@ func _update_brick_hardness():
 	get_node("ViewportSprite").set_self_opacity(1)
 	
 #Decrementa la durezza del mattone. Se ridotta a zero, il mattone è distrutto
-func decrease_hardness(ball_size):
+func decrease_hardness(ball_size,is_powered):
 	brick_hardness -=ball_size
 	_update_brick_hardness()
 	if(brick_hardness <= 0):
 		queue_free()
-		main.score += POINTS_AWARD
+		if(is_powered):
+			main.score += POINTS_AWARD *2
+		else:
+			main.score += POINTS_AWARD
 	
 #Ottinee un colore da un mattone. Se ha colori misti, viene scelto casualmente	
 func get_color_from_brick():
