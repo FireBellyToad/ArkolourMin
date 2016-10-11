@@ -4,6 +4,7 @@ extends Node
 var score setget ,get_score
 var high_score
 var difficulty 
+var bat_lives
 
 #Colori universali
 const DIFFICULTY_NORMAL = 1

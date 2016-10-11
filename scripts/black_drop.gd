@@ -15,7 +15,8 @@ func _fixed_process(delta):
 	#Se collide con la Sbarra, si perde una vita
 	for body in bodies:
 		if(body.get_name() == "Bat"):
-			body.queue_free()
+			body.die()
+			body.set_opacity(0)
 			queue_free()
 	
 	#Se esce dallo schermo viene rimosso

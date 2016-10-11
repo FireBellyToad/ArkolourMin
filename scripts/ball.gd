@@ -10,7 +10,9 @@ const NORMAL_SIZE = 2
 const LITTLE_SIZE = 1
 const BIG_SIZE = 100
 const STOP_TIME = 1
-const start_pos = Vector2(300,600)
+const BALL_START_POS= Vector2(300,600)
+const INITIAL_MULTIPLIER= 1
+const MAX_MULTIPLIER = 5
 
 #Variabili
 var ball_speed
@@ -19,6 +21,7 @@ var ball_size
 var move_time
 var ball_powered 
 var last_triang_body
+var ball_multiplier
 
 func _ready():
 	main = get_node("/root/main");
@@ -29,9 +32,10 @@ func _init_ball():
 	ball_powered = false;	
 	get_node("Emitter").set_emitting(ball_powered)
 	ball_speed = INITIAL_SPEED
+	ball_multiplier = INITIAL_MULTIPLIER
 	ball_size = NORMAL_SIZE
 	move_time = 0
-	set_pos(start_pos) 
+	set_pos(BALL_START_POS) 
 	_change_color(main.get_red_val())
 	set_linear_velocity(Vector2(0,-ball_speed))
 
@@ -56,9 +60,9 @@ func _fixed_process(delta):
 	 
 	var velocity = get_linear_velocity()
 	
-	#TODO se esce fuori dallo schermo, perde una vita
+	#Se esce fuori dallo schermo, perde una vita
 	if(get_pos().y > 700):
-		_init_ball()
+		get_parent().get_node("Bat").die()
 		return
 	
 	var bodies = get_colliding_bodies()
@@ -68,7 +72,7 @@ func _fixed_process(delta):
 		#Se l'oggetto con cui collide è un Mattone
 		if (body.is_in_group("Brick")):
 			#Decrementa la durezza del mattone e ne prende un colore
-			body.decrease_hardness(ball_size,ball_powered)
+			body.decrease_hardness(ball_size,ball_powered,ball_multiplier)
 			_change_color(body.get_color_from_brick())
 		
 		#Se l'oggetto con cui collide è la Sbarra
@@ -76,6 +80,14 @@ func _fixed_process(delta):
 				
 			#Rimbalza con un angolo dato dalla posizione della palla rispetto alla sbarra
 			ball_powered = body._get_color() == ball_color;
+			
+			#Se si continua a tenere il colore corretto, il moltiplicatore di punti aumenta
+			if(ball_powered):
+				ball_multiplier = min(ball_multiplier+1,MAX_MULTIPLIER)
+				get_node("Emitter").set_lifetime(0.1*ball_multiplier)
+			else:
+				ball_multiplier = INITIAL_MULTIPLIER
+				
 			var direction = get_pos() - body.get_node("Ancor").get_global_pos()
 			var velocity = direction.normalized()*ball_speed
 			set_linear_velocity(velocity)
@@ -104,7 +116,7 @@ func _fixed_process(delta):
 			body.queue_free()
 			#Se la palla è potenziata, raddopiano i punti
 			if(ball_powered):
-				main.score += body.POINTS_AWARD*2
+				main.score += body.POINTS_AWARD*ball_multiplier
 			else:
 				main.score += body.POINTS_AWARD
 
@@ -122,3 +134,6 @@ func _change_color(new_color):
 	
 	get_node("Emitter").set_color(main.get_godot_color(new_color))
 	
+func _on_Death_timeout():	
+	_init_ball()
+	pass # replace with function body

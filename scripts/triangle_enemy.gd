@@ -64,12 +64,16 @@ func _fixed_process(delta):
 	else:
 		wander_counter -=1*delta
 				
-		if(main.random(100) < WANDER_PROBABILITY and wander_counter <= 0 ):
-			var x = 525*(main.random(2)-1)/main.random(2);
-			var y = 575*(main.random(2)-1)/main.random(2);
-			new_pos= Vector2(x,y)
-			wander_counter = WANDER_COUNTER_MAX
-			
+	#calcolo destinazione
+	if(main.random(100) < WANDER_PROBABILITY and wander_counter <= 0):
+		_get_new_destination(true)
+	
+	#Finchè ha trovato un punto abbastanza lontano dall'obiettivo precente ricalcolo destinazione
+	#(Evita che scelga posizioni troppo vicine)
+	var too_close = get_global_pos().distance_to(new_pos)<5
+	while(too_close):
+		_get_new_destination(true)
+		too_close = get_global_pos().distance_to(new_pos)<5
 	
 	#Guarda la palla
 	var angle = get_angle_to(new_pos)
@@ -81,17 +85,25 @@ func _fixed_process(delta):
 	move(ball_dir*speed*delta)
 
 #Smette di muoversi e di cacciare
-func stop_hunting():	
+func stop_hunting():
 	is_hunting = false
 	stop_mov = true
-	var x = 525*(main.random(2)-1)/main.random(2);
-	var y = 575*(main.random(2)-1)/main.random(2);
-	new_pos= Vector2(x,y)
+	_get_new_destination(false)
 		
 #Ricomincia a muoversi
 func restart_movement():
 	hunt_countdown = HUNT_COUNTER_MAX
 	stop_mov = false
+
+#Trova una nuova destinazione per il movimento normale
+func _get_new_destination(must_restart_counter):
+	var x = 525*(main.random(2)-1)/main.random(2);
+	var y = 575*(main.random(2)-1)/main.random(2);
+	x = clamp(x,50,550)
+	y = clamp(y,50,550)
+	new_pos= Vector2(x,y)
+	if(must_restart_counter):
+		wander_counter = WANDER_COUNTER_MAX
 	
 func get_target():
 	return new_pos
