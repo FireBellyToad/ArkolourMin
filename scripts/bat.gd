@@ -82,5 +82,5 @@ func _on_Death_timeout():
 		main.bat_lives -=1
 		_init_bat()
 	else:
-		get_tree().change_scene("res://title.tscn")
+		get_tree().change_scene("res://scenes/title.tscn")
 	pass
