@@ -112,8 +112,8 @@ func get_color_from_brick():
 #Genera un power up
 func _spawn_power_up():
 	
-	#var power_spawned = main.random( main.POWERUPS_NUMBER )-1
-	var power_spawned = main.MALUS_C
+	var power_spawned = main.random( main.POWERUPS_NUMBER )-1
+	#var power_spawned = main.MALUS_C
 	
 	#Malus Goccia o Altro Bonus/Malus
 	if( power_spawned == main.MALUS_E ):
