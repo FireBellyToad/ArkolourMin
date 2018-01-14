@@ -32,8 +32,9 @@ func _ready( ):
 	
 func _init_ball( ):
 	ball_powered = false;	
-	get_node( "Emitter" ).set_emitting( true )
-	get_node("Emitter").set_lifetime( FIXED_EMITTING )
+	#get_node( "Emitter" ).set_emitting( true )
+	#get_node("Emitter").set_lifetime( FIXED_EMITTING )
+	get_node("Trail").set_track_length( 0 )
 	ball_speed = INITIAL_SPEED
 	restore_size()
 	move_time = 0
@@ -90,8 +91,9 @@ func _fixed_process(delta ):
 				ball_multiplier = INITIAL_MULTIPLIER
 			
 			#Disegna la scia di una lunghezza fissa a seconda del moltiplicatore	
-			get_node("Emitter").set_lifetime( FIXED_EMITTING + ( EMITTING_FACTOR * ( ball_multiplier- 1) ) )
-				
+			#get_node("Emitter").set_lifetime( FIXED_EMITTING + ( EMITTING_FACTOR * ( ball_multiplier- 1) ) )
+			get_node("Trail").set_track_length( ( ball_multiplier - 1) * 10 )
+					
 			#Rimbalza con un angolo dato dalla posizione della palla rispetto alla sbarra
 			var direction = get_pos() - body.get_node( "Ancor" ).get_global_pos()
 			var velocity = direction.normalized() * ball_speed
@@ -138,7 +140,8 @@ func _change_color( new_color ):
 	#cambia il colore della palla a schermo
 	get_node( "Viewport/Sphere" ).set_material_override( main.get_mat( new_color ) )
 	
-	get_node( "Emitter" ).set_color( main.get_godot_color( new_color ) )
+	#get_node( "Emitter" ).set_color( main.get_godot_color( new_color ) )
+	get_node("Trail").set_trail_color(main.get_godot_color( new_color) )
 	
 func _on_Death_timeout( ):	
 	_init_ball()
