@@ -1,6 +1,7 @@
 extends Node2D
 
-var track_length = 0
+export var draw_circle = true
+export var track_length = 10
 var update_delay_frames = 0
 var track_delay_counter = 0
 var trail_color = 0
@@ -16,7 +17,7 @@ func _ready():
 
 func _init():
 	set_fixed_process(true)
-	trail_color = Color(1,0,0)
+	trail_color = Color(0,0,0,1)
 	
 func _fixed_process(delta):
 	#Prende il delay
@@ -38,8 +39,16 @@ func add_position(new_position):
 
 func draw_trail():
 	draw_set_transform( - get_global_transform().get_origin(), 0, Vector2(1,1))
-	for pos in self.track:
-		draw_circle(pos,10,trail_color)
+
+	var i = 0
+	if(draw_circle):
+		for pos in self.track:
+			draw_circle(pos,10,trail_color)
+	else:
+		for i in range(self.track_length):
+			draw_line(self.track[i+1], self.track[i+1], trail_color, 2*(i/10))	
+			draw_line(self.track[self.track_length -1], get_global_transform().get_origin(), Color(1, 0, 0), 2)
+	
 	if(self.track.size() > self.track_length):
 		self.track.resize(self.track_length)
 	
